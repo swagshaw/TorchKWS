@@ -81,6 +81,11 @@ class Trainer:
             self.model.train()
             for batch_idx, (waveform, labels) in tqdm(enumerate(train_dataloader), position=0):
                 waveform, labels = waveform.to(self.device), labels.to(self.device)
+                """
+                waveform:(B,C,16000)
+                MFCC:(B,C,F,T)
+                labels:(B,)
+                """
                 # print((waveform.size,labels))
                 optimizer.zero_grad()
                 logits = self.model(waveform)
