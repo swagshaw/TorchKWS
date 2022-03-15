@@ -34,6 +34,7 @@ _Broadcasted Residual Learning for Efficient Keyword Spotting_
 # Reference
 1. https://github.com/hyperconnect/TC-ResNet
 2. https://github.com/eriklindernoren/PyTorch-GAN
+3. https://github.com/roman-vygon/BCResNet
 
 # Acknowledgement
 Thanks for the contribution by [huangyz0918](https://github.com/huangyz0918)!

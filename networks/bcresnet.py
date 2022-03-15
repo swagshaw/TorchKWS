@@ -156,40 +156,28 @@ class BCResNet(torch.nn.Module):
         self.conv4 = nn.Conv2d(32*scale, n_class, 1, bias=False)
 
     def forward(self, x):
-        # print('INPUT SHAPE:', x.shape)
         out = self.conv1(x)
 
-        # print('BLOCK1 INPUT SHAPE:', out.shape)
         out = self.block1_1(out)
         out = self.block1_2(out)
 
-        # print('BLOCK2 INPUT SHAPE:', out.shape)
         out = self.block2_1(out)
         out = self.block2_2(out)
 
-        # print('BLOCK3 INPUT SHAPE:', out.shape)
         out = self.block3_1(out)
         out = self.block3_2(out)
         out = self.block3_3(out)
         out = self.block3_4(out)
 
-        # print('BLOCK4 INPUT SHAPE:', out.shape)
         out = self.block4_1(out)
         out = self.block4_2(out)
         out = self.block4_3(out)
         out = self.block4_4(out)
 
-        # print('Conv2 INPUT SHAPE:', out.shape)
         out = self.conv2(out)
-
-        # print('Conv3 INPUT SHAPE:', out.shape)
         out = self.conv3(out)
         out = out.mean(-1, keepdim=True)
-
-        # print('Conv4 INPUT SHAPE:', out.shape)
         out = self.conv4(out).squeeze()
-
-        # print('OUTPUT SHAPE:', out.shape)
         return out
 
 
@@ -208,7 +196,9 @@ class MFCC_BCResnet(nn.Module):
         logits = self.bc_resnet(mel_sepctogram)
         return logits
 
-# x = torch.ones(128, 1, 16000)
-# bcresnet = MFCC_BCResnet(bins=40, channel_scale=1, num_classes=30)
-# _ = bcresnet(x)
-# print('num parameters:', sum(p.numel() for p in bcresnet.parameters() if p.requires_grad))
+
+if __name__ == "__main__":
+    x = torch.ones(128, 1, 16000)
+    bcresnet = MFCC_BCResnet(bins=40, channel_scale=1, num_classes=30)
+    _ = bcresnet(x)
+    print('num parameters:', sum(p.numel() for p in bcresnet.parameters() if p.requires_grad))
