@@ -68,11 +68,10 @@ class Trainer:
         if (self.epo + 1) == self.epoch:
             torch.save(self.model.state_dict(), os.path.join(save_directory, "last.pt"))
 
-    def model_train(self, optimizer, train_dataloader, valid_dataloader):
+    def model_train(self, optimizer, scheduler, train_dataloader, valid_dataloader):
         """
         Normal model training process, without modifying the loss function.
         """
-        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=self.step, gamma=0.1, last_epoch=-1)
         train_length, valid_length = len(train_dataloader), len(valid_dataloader)
         logger.info(f"[3] Training for {self.epoch} epochs...")
         for self.epo in range(self.epoch):

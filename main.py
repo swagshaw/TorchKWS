@@ -26,6 +26,8 @@ if __name__ == "__main__":
         parser.add_argument("--model", default="bcresnet8", type=str, help="models")
         parser.add_argument("--freq", default=30, type=int, help="Model saving frequency (in step)")
         parser.add_argument("--save", default="weight", type=str, help="The save name")
+        parser.add_argument("--opt", default="adam", type=str, help="The optimizer")
+        parser.add_argument("--sche", default="cos", type=str, help="The scheduler")
         args = parser.parse_args()
         return args
 
@@ -59,7 +61,7 @@ if __name__ == "__main__":
     """
     model = select_model(parameters.model, len(class_list))
     logger.info(f"[2] Select a KWS model ({parameters.model})")
-    optimizer, _ = select_optimizer("adam", parameters.lr, model)
+    optimizer, scheduler = select_optimizer(parameters.opt, parameters.lr, model, parameters.sche)
     """
     Train 
     """
@@ -67,7 +69,8 @@ if __name__ == "__main__":
     train_loader, test_loader = get_dataloader_keyword(data_path, class_list,
                                                        class_encoding, parameters.batch)
     start_time = time.time()
-    result = Trainer(parameters, model).model_train(optimizer=optimizer, train_dataloader=train_loader,
+    result = Trainer(parameters, model).model_train(optimizer=optimizer, scheduler=scheduler,
+                                                    train_dataloader=train_loader,
                                                     valid_dataloader=test_loader)
 
     """
