@@ -6,8 +6,8 @@ Model architectures will not always mirror the ones proposed in the papers, but 
 # Table of Contents
   * [Installation](#installation)
   * [Implementations](#implementations)
-    + [Temporal Convolution Resnet(TC-Resnet)](#temporal-convolution-resnet)
-    
+    + [Temporal Convolution Resnet(TC-ResNet)](#temporal-convolution-resnet)
+    + [Broadcasting-residual network(BC-ResNet)](#broadcasting-residual-network)
 
 # Implementations
 ## About DataSet
@@ -26,6 +26,10 @@ bash download_gsc.sh
 ## Temporal Convolution Resnet
 _Temporal Convolution for Real-time Keyword Spotting on Mobile Devices_
 [[Paper]](https://arxiv.org/abs/1904.03814) [[Code]](networks/tcresnet.py)
+
+## Broadcasting-residual network
+_Broadcasted Residual Learning for Efficient Keyword Spotting_
+[[Paper]](https://arxiv.org/abs/2106.04140) [[Code]](networks/bcresnet.py)
 
 # Reference
 1. https://github.com/hyperconnect/TC-ResNet
