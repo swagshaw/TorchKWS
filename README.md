@@ -10,3 +10,7 @@ Model architectures will not always mirror the ones proposed in the papers, but 
 [Speech Commands Data Set](https://ai.googleblog.com/2017/08/launching-speech-commands-dataset.html) is a set of one-second .wav audio files, each containing a single spoken English word.
 These words are from a small set of commands, and are spoken by a variety of different speakers.
 The audio files are organized into folders based on the word they contain, and this data set is designed to help train simple machine learning models.
+
+# Reference
+1. https://github.com/hyperconnect/TC-ResNet
+2. https://github.com/eriklindernoren/PyTorch-GAN
