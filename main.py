@@ -9,6 +9,7 @@ import os
 import logging.config
 import time
 import argparse
+from utils.utils import *
 from utils.train_utils import *
 from train import Trainer, get_dataloader_keyword
 
@@ -17,12 +18,12 @@ if __name__ == "__main__":
         parser = argparse.ArgumentParser(description="Input optional guidance for training")
         parser.add_argument("--epoch", default=10, type=int, help="The number of training epoch")
         parser.add_argument("--lr", default=0.01, type=float, help="Learning rate")
-        parser.add_argument("--batch", default=128, type=int, help="Training batch size")
+        parser.add_argument("--batch", default=256, type=int, help="Training batch size")
         parser.add_argument("--step", default=30, type=int, help="Training step size")
         parser.add_argument("--gpu", default=1, type=int, help="Number of GPU device")
         parser.add_argument("--root", default="./dataset", type=str, help="The path of dataset")
         parser.add_argument("--dataset", default="gsc", help="The name of the data set")
-        parser.add_argument("--model", default="tcresnet8", type=str, help="models")
+        parser.add_argument("--model", default="bcresnet8", type=str, help="models")
         parser.add_argument("--freq", default=30, type=int, help="Model saving frequency (in step)")
         parser.add_argument("--save", default="weight", type=str, help="The save name")
         args = parser.parse_args()
@@ -59,7 +60,6 @@ if __name__ == "__main__":
     model = select_model(parameters.model, len(class_list))
     logger.info(f"[2] Select a KWS model ({parameters.model})")
     optimizer, _ = select_optimizer("adam", parameters.lr, model)
-
     """
     Train 
     """
@@ -76,6 +76,7 @@ if __name__ == "__main__":
     # Total time (T)
     duration = time.time() - start_time
     logger.info(f"======== Summary =======")
+    logger.info(f"{parameters.model} parameters: {parameter_number(model)}")
     logger.info(f"Total time {duration}, Avg: {duration / parameters.epoch}s")
     logger.info(
         f"train_loss {result['train_loss']:.4f} "

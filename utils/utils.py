@@ -34,7 +34,7 @@ def parameter_number(model):
     for tensor in list(model.parameters()):
         tensor = tensor.view(-1)
         num_params += len(tensor)
-    print(">>>  ", num_params)
+    return num_params
 
 
 def prepare_device(n_gpu_use):
