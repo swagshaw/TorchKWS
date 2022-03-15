@@ -5,6 +5,7 @@
 @Author  : Yang "Jan" Xiao 
 @Description : tcresnet
 """
+import torch
 from einops import rearrange
 from torchaudio.transforms import MFCC
 from torch import nn
@@ -99,3 +100,12 @@ class TCResNet(nn.Module):
         out = out.view(out.shape[0], -1)
         out = self.linear(out)
         return out
+
+
+if __name__ == "__main__":
+    x = torch.randn((128, 1, 40, 181))
+    model = TCResNet(
+        bins=40, n_channels=[16, 24, 32, 48], n_class=30
+    )
+    pred = model(x)
+    print(pred.shape)
