@@ -7,6 +7,8 @@
 """
 import torch_optimizer
 from torch import optim
+
+from networks.bcresnet import MFCC_BCResnet
 from networks.tcresnet import MFCC_TCResnet
 
 
@@ -53,9 +55,11 @@ def select_model(model_name, total_class_num=None):
     elif model_name == "tcresnet14":
         model = MFCC_TCResnet(bins=40, channels=config[model_name], channel_scale=1,
                               num_classes=total_class_num)
+    elif model_name == "bcresnet":
+        model = MFCC_BCResnet(bins=40, channel_scale=1, num_classes=30)
+    elif model_name == "bcresnet8":
+        model = MFCC_BCResnet(bins=40, channel_scale=8, num_classes=30)
     else:
         model = None
 
     return model
-
-
