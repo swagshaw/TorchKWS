@@ -3,9 +3,13 @@ AI Research into Spoken Keyword Spotting.
 Collection of PyTorch implementations of Spoken Keyword Spotting presented in research papers.
 Model architectures will not always mirror the ones proposed in the papers, but I have chosen to focus on getting the core ideas covered instead of getting every layer configuration right. 
 
+# Table of Contents
+  * [Installation](#installation)
+  * [Implementations](#implementations)
+    + [Temporal Convolution Resnet(TC-Resnet)](#temporal-convolution-resnet)
+    
 
 # Implementations
-
 ## About DataSet
 [Speech Commands DataSet](https://ai.googleblog.com/2017/08/launching-speech-commands-dataset.html) is a set of one-second .wav audio files, each containing a single spoken English word.
 These words are from a small set of commands, and are spoken by a variety of different speakers.
@@ -18,6 +22,10 @@ We use the Google Speech Commands Dataset (GSC) as the training data. By running
 cd <ROOT>/dataset
 bash download_gsc.sh
 ```
+
+## Temporal Convolution Resnet
+_Temporal Convolution for Real-time Keyword Spotting on Mobile Devices_
+[[Paper]](https://arxiv.org/abs/1904.03814) [[Code]](networks/tcresnet.py)
 
 # Reference
 1. https://github.com/hyperconnect/TC-ResNet
