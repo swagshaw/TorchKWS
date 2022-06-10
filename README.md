@@ -31,10 +31,15 @@ _Temporal Convolution for Real-time Keyword Spotting on Mobile Devices_
 _Broadcasted Residual Learning for Efficient Keyword Spotting_
 [[Paper]](https://arxiv.org/abs/2106.04140) [[Code]](networks/bcresnet.py)
 
+## MatchboxNet
+_MatchboxNet: 1D Time-Channel Separable Convolutional Neural Network Architecture for Speech Commands Recognition_
+[[Paper]](https://arxiv.org/abs/2004.08531) [[Code]](networks/matchboxnet.py)
 # Reference
 1. https://github.com/hyperconnect/TC-ResNet
-2. https://github.com/eriklindernoren/PyTorch-GAN
-3. https://github.com/roman-vygon/BCResNet
+2. https://github.com/huangyz0918/kws-continual-learning
+3. https://github.com/eriklindernoren/PyTorch-GAN
+4. https://github.com/roman-vygon/BCResNet
+5. https://github.com/dominickrei/MatchboxNet
 
 # Acknowledgement
 Thanks for the contribution by [huangyz0918](https://github.com/huangyz0918)!
