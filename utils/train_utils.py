@@ -10,6 +10,7 @@ from torch import optim
 
 from networks.bcresnet import MFCC_BCResnet
 from networks.tcresnet import MFCC_TCResnet
+from networks.matchboxnet import MFCC_MatchboxNet
 
 
 def select_optimizer(opt_name, lr, model, sched_name="cos"):
@@ -21,6 +22,8 @@ def select_optimizer(opt_name, lr, model, sched_name="cos"):
         opt = optim.SGD(
             model.parameters(), lr=lr, momentum=0.9, nesterov=True, weight_decay=1e-4
         )
+    elif opt_name == "NovoGrad":
+        opt = torch_optimizer.NovoGrad(model.parameters(), lr=0.05, betas=(0.95, 0.5), weight_decay=0.001)
     else:
         raise NotImplementedError("Please select the opt_name [adam, sgd]")
 
@@ -32,7 +35,7 @@ def select_optimizer(opt_name, lr, model, sched_name="cos"):
         scheduler = optim.lr_scheduler.ExponentialLR(opt, 1 / 1.1, last_epoch=-1)
     elif sched_name == "multistep":
         scheduler = optim.lr_scheduler.MultiStepLR(
-            opt, milestones=[30, 60, 80, 90], gamma=0.1
+            opt, list(range(5, 26)), gamma=0.85
         )
     else:
         raise NotImplementedError(
@@ -59,6 +62,8 @@ def select_model(model_name, total_class_num=None):
         model = MFCC_BCResnet(bins=40, channel_scale=1, num_classes=30)
     elif model_name == "bcresnet8":
         model = MFCC_BCResnet(bins=40, channel_scale=8, num_classes=30)
+    elif model_name == "matchboxnet":
+        model = MFCC_MatchboxNet(bins=64, B=3, R=2, n_channels=64, num_classes=30)
     else:
         model = None
 

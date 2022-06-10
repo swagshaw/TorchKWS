@@ -5,6 +5,7 @@
 @Author  : Yang "Jan" Xiao 
 @Description : utils
 """
+import numpy as np
 import torch
 
 
@@ -27,6 +28,13 @@ def readlines(datapath):
     with open(datapath, 'r') as f:
         lines = f.read().splitlines()
     return lines
+
+
+def padding(batch, seq_len):
+    if len(batch[0][0]) < seq_len:
+        m = torch.nn.ConstantPad1d((0, seq_len - len(batch[0][0])), 0)
+        batch = m(batch)
+    return batch
 
 
 def parameter_number(model):
