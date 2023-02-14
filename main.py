@@ -9,8 +9,6 @@ import os
 import logging.config
 import time
 import argparse
-from utils.utils import *
-from utils.train_utils import *
 from train import Trainer, get_dataloader_keyword
 
 if __name__ == "__main__":

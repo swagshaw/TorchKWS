@@ -1,0 +1,38 @@
+data:
+  root_dir: data/
+  num_mfccs: 20
+  num_fft: 1024
+  num_mels: 64
+  hop_length: 10
+  window_length: 20
+  sample_rate: 16000
+
+models:
+  - name: cnn1d
+    architecture: models.cnn1d.CNN1D
+    optimizer:
+      name: SGD
+      learning_rate: 0.01
+      momentum: 0.9
+    loss_function: CrossEntropyLoss
+    num_classes: 2
+    batch_size: 32
+    epochs: 10
+    early_stopping_patience: 5
+
+scripts:
+  preprocess:
+    name: preprocess.py
+    output_dir: data/processed/
+    audio_length: 16000
+    use_mfccs: true
+    num_mfccs: 20
+    num_fft: 1024
+    num_mels: 64
+    hop_length: 10
+    window_length: 20
+  train:
+    name: train.py
+    model_name: cnn1d
+    checkpoint_dir: models/cnn1d/checkpoints/
+    log_dir: models/cnn1d/logs/

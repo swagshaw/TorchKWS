@@ -10,7 +10,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torchaudio.transforms import MFCC
-from utils.utils import padding
+from torchkws.utils import padding
 
 class TCSConv(nn.Module):
     '''

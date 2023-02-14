@@ -5,3 +5,5 @@
 @Author  : Yang "Jan" Xiao 
 @Description : __init__.py
 """
+
+from base_model import KWSModel

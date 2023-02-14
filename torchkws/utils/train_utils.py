@@ -8,9 +8,9 @@
 import torch_optimizer
 from torch import optim
 
-from networks.bcresnet import MFCC_BCResnet
-from networks.tcresnet import MFCC_TCResnet
-from networks.matchboxnet import MFCC_MatchboxNet
+from torchkws.models.bcresnet import MFCC_BCResnet
+from torchkws.models.tcresnet import MFCC_TCResnet
+from torchkws.models.matchboxnet import MFCC_MatchboxNet
 
 
 def select_optimizer(opt_name, lr, model, sched_name="cos"):

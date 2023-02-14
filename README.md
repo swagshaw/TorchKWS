@@ -1,43 +1,38 @@
 # TorchKWS
-AI Research into Spoken Keyword Spotting. 
-Collection of PyTorch implementations of Spoken Keyword Spotting presented in research papers.
-Model architectures will not always mirror the ones proposed in the papers, but I have chosen to focus on getting the core ideas covered instead of getting every layer configuration right. 
-
-# Table of Contents
-  * [Installation](#installation)
-  * [Implementations](#implementations)
-    + [Temporal Convolution Resnet(TC-ResNet)](#temporal-convolution-resnet)
-    + [Broadcasting Residual Network(BC-ResNet)](#broadcasting-residual-network)
-    + [MatchboxNet](#matchboxnet)
-
-# Implementations
-## About DataSet
-[Speech Commands DataSet](https://ai.googleblog.com/2017/08/launching-speech-commands-dataset.html) is a set of one-second .wav audio files, each containing a single spoken English word.
-These words are from a small set of commands, and are spoken by a variety of different speakers.
-The audio files are organized into folders based on the word they contain, and this dataset is designed to help train simple machine learning models.
-
+TorchKWS is a collection of PyTorch implementations of spoken keyword spotting models that have been presented in research papers. It includes implementations of various neural network architectures, as well as utilities for data preprocessing, training, and evaluation.
 ## Installation
-We use the Google Speech Commands Dataset (GSC) as the training data. By running the script, you can download the training data:
+To use TorchKWS, you'll need to have PyTorch and other required dependencies installed. You can install the required dependencies using pip:
+```bash
+pip install -r requirements.txt
+```
+## Dataset
+To use TorchKWS, you'll need to have a dataset of speech recordings and corresponding keyword labels. One example dataset you can use is the [Google Speech Commands dataset](https://ai.googleblog.com/2017/08/launching-speech-commands-dataset.html), which consists of 65,000 one-second long utterances of 30 short words, by thousands of different people.
+
+To download and preprocess the Google Speech Commands dataset, you can use the `download_google_speech_commands.py` script in the data directory:
+
+This will download the dataset and preprocess it into WAV files and CSV files containing the file paths and labels for the training, validation, and test sets.
+
+## Usage
+To train a keyword spotting model using TorchKWS, you can use the `train.py` script. This script takes a configuration file as input, which specifies the hyperparameters for the model, training, and evaluation.
+
+Here's an example of how to train a model using the configuration file `config.yaml`:
 
 ```bash
-cd <ROOT>/dataset
-bash download_gsc.sh
+python train.py --config_path config.yaml
 ```
 
-## Temporal Convolution Resnet
-_Temporal Convolution for Real-time Keyword Spotting on Mobile Devices_
-[[Paper]](https://arxiv.org/abs/1904.03814) [[Code]](networks/tcresnet.py)
+You can modify the hyperparameters in the `config.yaml` file to experiment with different model architectures and training strategies.
 
-## Broadcasting Residual Network
-_Broadcasted Residual Learning for Efficient Keyword Spotting_
-[[Paper]](https://arxiv.org/abs/2106.04140) [[Code]](networks/bcresnet.py)
+## Package Structure
+The TorchKWS repository is organized into several packages:
 
-## MatchboxNet
-_MatchboxNet: 1D Time-Channel Separable Convolutional Neural Network Architecture for Speech Commands Recognition_
-[[Paper]](https://arxiv.org/abs/2004.08531) [[Code]](networks/matchboxnet.py)
-# Reference
-1. https://github.com/hyperconnect/TC-ResNet
-2. https://github.com/huangyz0918/kws-continual-learning
-3. https://github.com/eriklindernoren/PyTorch-GAN
-4. https://github.com/roman-vygon/BCResNet
-5. https://github.com/dominickrei/MatchboxNet
+- `data`: Contains utilities for loading and preprocessing datasets, as well as scripts for downloading and preprocessing specific datasets.
+- `models`: Contains implementations of various neural network architectures for keyword spotting.
+- `training`: Contains utilities for training and evaluating models, as well as the `train.py` script for training models using a specified configuration file.
+- `utils`: Contains miscellaneous utility functions.
+
+## Contributions
+Contributions to TorchKWS are welcome! If you'd like to contribute, please submit a pull request. We also welcome suggestions for new models to implement or new features to add to the repository.
+
+## License
+TorchKWS is released under the [MIT License](https://github.com/example/torchkws/blob/main/LICENSE).
