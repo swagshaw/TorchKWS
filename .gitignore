@@ -37,7 +37,12 @@ test
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
-
+dataset/gsc_v1/
+dataset/gsc_v2/
+dataset/gsc_v2/
+dataset/gsc_v1/
+*.wav
+*.gz
 # Unit test / coverage reports
 htmlcov/
 .tox/
