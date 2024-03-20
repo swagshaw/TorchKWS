@@ -8,7 +8,6 @@
 import torch
 from torch import Tensor
 import torch.nn as nn
-from torchaudio.transforms import MFCC
 
 
 class SubSpectralNorm(nn.Module):
@@ -181,24 +180,5 @@ class BCResNet(torch.nn.Module):
         return out
 
 
-class MFCC_BCResnet(nn.Module):
-    def __init__(self, bins: int, channel_scale: int, num_classes=12):
-        super(MFCC_BCResnet, self).__init__()
-        self.sampling_rate = 16000
-        self.bins = bins
-        self.channel_scale = channel_scale
-        self.num_classes = num_classes
-        self.mfcc_layer = MFCC(sample_rate=self.sampling_rate, n_mfcc=self.bins, log_mels=True)
-        self.bc_resnet = BCResNet(num_classes, channel_scale)
 
-    def forward(self, waveform):
-        mel_sepctogram = self.mfcc_layer(waveform)
-        logits = self.bc_resnet(mel_sepctogram)
-        return logits
-
-
-if __name__ == "__main__":
-    x = torch.ones(128, 1, 16000)
-    bcresnet = MFCC_BCResnet(bins=40, channel_scale=1, num_classes=30)
-    _ = bcresnet(x)
-    print('num parameters:', sum(p.numel() for p in bcresnet.parameters() if p.requires_grad))
+    

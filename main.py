@@ -22,7 +22,7 @@ if __name__ == "__main__":
         parser.add_argument("--step", default=30, type=int, help="Training step size")
         parser.add_argument("--gpu", default=1, type=int, help="Number of GPU device")
         parser.add_argument("--root", default="./dataset", type=str, help="The path of dataset")
-        parser.add_argument("--dataset", default="gsc", help="The name of the data set")
+        parser.add_argument("--dataset", default="gsc_v2", help="The name of the data set")
         parser.add_argument("--model", default="bcresnet8", type=str, help="models")
         parser.add_argument("--freq", default=30, type=int, help="Model saving frequency (in step)")
         parser.add_argument("--save", default="weight", type=str, help="The save name")
@@ -37,10 +37,10 @@ if __name__ == "__main__":
     """
     Data 
     """
-    class_list = ["yes", "no", "nine", "three", "bed", "up", "down", "wow", "happy", "four",
-                  "stop", "go", "dog", "cat", "five", "tree", "one", "eight", "left", "right",
-                  "bird", "seven", "six", "two", "marvin", "on", "sheila", "off", "house", "zero"]
-    class_encoding = {category: index for index, category in enumerate(class_list)}
+    if parameters.dataset == "gsc_v1" or parameters.dataset == "gsc_v2":
+        class_list = ["yes", "no", "up", "down", "left", "right", "on", "off", "stop", "go", "unknown", "silence"]
+        class_encoding = {category: index for index, category in enumerate(class_list)}
+
 
     """
     Logger 
@@ -66,13 +66,14 @@ if __name__ == "__main__":
     Train 
     """
     data_path = os.path.join(parameters.root, parameters.dataset)
-    train_loader, test_loader = get_dataloader_keyword(data_path, class_list,
-                                                       class_encoding, parameters.batch)
+    logger.info(f"[4] Load the KWS dataset from {data_path}")
+    train_loader, valid_loader, test_loader = get_dataloader_keyword(data_path, class_list,
+                                                       class_encoding, parameters)
     start_time = time.time()
-    result = Trainer(parameters, model).model_train(optimizer=optimizer, scheduler=scheduler,
+    Trainer(parameters, model).model_train(optimizer=optimizer, scheduler=scheduler,
                                                     train_dataloader=train_loader,
-                                                    valid_dataloader=test_loader)
-
+                                                    valid_dataloader=valid_loader)
+    result = Trainer(parameters, model).model_test(test_dataloader=test_loader)
     """
     Summary
     """
@@ -81,10 +82,4 @@ if __name__ == "__main__":
     logger.info(f"======== Summary =======")
     logger.info(f"{parameters.model} parameters: {parameter_number(model)}")
     logger.info(f"Total time {duration}, Avg: {duration / parameters.epoch}s")
-    logger.info(
-        f"train_loss {result['train_loss']:.4f} "
-        f"| train_acc {100 * result['train_accuracy']:.4f}")
-    logger.info(
-        f"test_loss {result['valid_loss']:.4f} "
-        f"| test_acc {100 * result['valid_accuracy']:.4f}"
-    )
+

@@ -9,7 +9,6 @@ reference:https://github.com/dominickrei/MatchboxNet
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torchaudio.transforms import MFCC
 from utils.utils import padding
 
 class TCSConv(nn.Module):
@@ -179,7 +178,7 @@ class MatchboxNet(nn.Module):
     torch.Size([1, 30])
     '''
 
-    def __init__(self, B, R, C, bins=64, kernel_sizes=None, NUM_CLASSES=30):
+    def __init__(self, B, R, C, bins=64, kernel_sizes=None, num_classes=30):
         super(MatchboxNet, self).__init__()
         if not kernel_sizes:
             kernel_sizes = [k * 2 + 11 for k in range(1, 5 + 1)]  # incrementing kernel size by 2 starting at 13
@@ -207,12 +206,14 @@ class MatchboxNet(nn.Module):
         self.epilogue_conv2 = nn.Conv1d(128, 128, kernel_size=1)
         self.epilogue_bnorm2 = nn.BatchNorm1d(128)
 
-        self.epilogue_conv3 = nn.Conv1d(128, NUM_CLASSES, kernel_size=1)
+        self.epilogue_conv3 = nn.Conv1d(128, num_classes, kernel_size=1)
 
         # Pool the timesteps into a single dimension using simple average pooling
         self.epilogue_adaptivepool = nn.AdaptiveAvgPool1d(1)
 
     def forward(self, x):
+        x = x.squeeze(1)
+        x = padding(x, 128)
         # prologue block
         x = self.prologue_conv1(x)
         x = self.prologue_bnorm1(x)
@@ -235,29 +236,3 @@ class MatchboxNet(nn.Module):
         x = F.softmax(x, dim=1)  # softmax across classes and not batch
 
         return x
-
-
-class MFCC_MatchboxNet(nn.Module):
-    def __init__(self, bins: int, B: int, R: int, n_channels, kernel_sizes=None, num_classes=12):
-        super(MFCC_MatchboxNet, self).__init__()
-        self.sampling_rate = 16000
-        self.bins = bins
-        self.num_classes = num_classes
-        self.mfcc_layer = MFCC(sample_rate=self.sampling_rate, n_mfcc=self.bins, log_mels=True)
-        self.matchboxnet = MatchboxNet(B, R, n_channels, bins=self.bins, kernel_sizes=kernel_sizes,
-                                       NUM_CLASSES=num_classes)
-
-    def forward(self, waveform):
-        mel_sepctogram = self.mfcc_layer(waveform)
-        mel_sepctogram = mel_sepctogram.squeeze(1)
-        mel_sepctogram = padding(mel_sepctogram, 128)
-        logits = self.matchboxnet(mel_sepctogram)
-        return logits
-
-
-if __name__ == "__main__":
-    inputs = torch.randn(128, 64, 50)
-    inputs = padding(inputs, 128)
-    model = MatchboxNet(B=3, R=2, C=64, bins=64, NUM_CLASSES=30)
-    outputs = model(inputs)
-    print(outputs.shape)

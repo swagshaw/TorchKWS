@@ -7,26 +7,8 @@
 """
 import torch
 from einops import rearrange
-from torchaudio.transforms import MFCC
 from torch import nn
 
-
-class MFCC_TCResnet(nn.Module):
-    def __init__(self, bins: int, channels, channel_scale: int, num_classes=12):
-        super(MFCC_TCResnet, self).__init__()
-        self.sampling_rate = 16000
-        self.bins = bins
-        self.channels = channels
-        self.channel_scale = channel_scale
-        self.num_classes = num_classes
-
-        self.mfcc_layer = MFCC(sample_rate=self.sampling_rate, n_mfcc=self.bins, log_mels=True)
-        self.tc_resnet = TCResNet(self.bins, [int(cha * self.channel_scale) for cha in self.channels], self.num_classes)
-
-    def forward(self, waveform):
-        mel_sepctogram = self.mfcc_layer(waveform)
-        logits = self.tc_resnet(mel_sepctogram)
-        return logits
 
 
 class Residual(nn.Module):
@@ -100,12 +82,3 @@ class TCResNet(nn.Module):
         out = out.view(out.shape[0], -1)
         out = self.linear(out)
         return out
-
-
-if __name__ == "__main__":
-    x = torch.randn((128, 1, 40, 181))
-    model = TCResNet(
-        bins=40, n_channels=[16, 24, 32, 48], n_class=30
-    )
-    pred = model(x)
-    print(pred.shape)
