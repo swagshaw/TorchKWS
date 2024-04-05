@@ -71,7 +71,8 @@ class Trainer:
         if len(self.device_list) > 1:
             print(f">>>   Available GPU device: {self.device_list}")
             self.model = nn.DataParallel(self.model)
-
+        self.best_acc = 0.0
+        self.best_model = None
         self.criterion = nn.CrossEntropyLoss()
         self.loss_name = {
             "train_loss": 0.0, "train_accuracy": 0.0, "train_total": 0, "train_correct": 0,
@@ -82,12 +83,13 @@ class Trainer:
         if not os.path.isdir(save_directory):
             os.makedirs(save_directory)
 
-        # if (self.epo + 1) % self.opt.freq == 0:
-        #     torch.save(self.model.state_dict(), os.path.join(save_directory, "model" + str(self.epoch + 1) + ".pt"))
-        # save the best model.
+
         if self.loss_name["valid_accuracy"] > self.best_acc:
-            self.opt.best_acc = self.loss_name["valid_accuracy"]
-            torch.save(self.model.state_dict(), os.path.join(save_directory, f"best_in_{self.epoch}.pt"))
+            self.best_acc = self.loss_name["valid_accuracy"]
+            self.best_model = self.model
+            logger.info(f"Saving the best model with accuracy {self.best_acc:.4f}")
+            torch.save(self.model.state_dict(), os.path.join(save_directory, f"best.pt"))
+
         if (self.epo + 1) == self.epoch:
             torch.save(self.model.state_dict(), os.path.join(save_directory, "last.pt"))
 
@@ -145,13 +147,13 @@ class Trainer:
         return self.loss_name
 
     def model_test(self, test_dataloader):
-        self.model.eval()
+        self.best_model.eval()
         test_length = len(test_dataloader)
         self.loss_name.update({key: 0 for key in self.loss_name})
         for batch_idx, (waveform, labels) in enumerate(test_dataloader):
             with torch.no_grad():
                 waveform, labels = waveform.to(self.device), labels.to(self.device)
-                logits = self.model(waveform)
+                logits = self.best_model(waveform)
                 loss = self.criterion(logits, labels)
 
                 self.loss_name["valid_loss"] += loss.item() / test_length

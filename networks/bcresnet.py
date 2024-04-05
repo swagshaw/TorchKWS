@@ -46,7 +46,7 @@ class BroadcastedBlock(nn.Module):
                                       dilation=dilation, stride=stride, bias=False)
         self.bn = nn.BatchNorm2d(planes)
         self.relu = nn.ReLU(inplace=True)
-        self.channel_drop = nn.Dropout2d(p=0.5)
+        self.channel_drop = nn.Dropout2d(p=0.1)
         self.swish = nn.SiLU()
         self.conv1x1 = nn.Conv2d(planes, planes, kernel_size=(1, 1), bias=False)
 
@@ -98,7 +98,7 @@ class TransitionBlock(nn.Module):
         self.bn1 = nn.BatchNorm2d(planes)
         self.bn2 = nn.BatchNorm2d(planes)
         self.relu = nn.ReLU(inplace=True)
-        self.channel_drop = nn.Dropout2d(p=0.5)
+        self.channel_drop = nn.Dropout2d(p=0.1)
         self.swish = nn.SiLU()
         self.conv1x1_1 = nn.Conv2d(inplanes, planes, kernel_size=(1, 1), bias=False)
         self.conv1x1_2 = nn.Conv2d(planes, planes, kernel_size=(1, 1), bias=False)
